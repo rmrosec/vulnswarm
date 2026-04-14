@@ -15,7 +15,7 @@ check() {
 echo "VulnSwarm environment check"
 echo "==========================="
 check git "install via your package manager"
-check semgrep "pip install semgrep"
+check semgrep "pipx install semgrep"
 
 if [ "$errors" -gt 0 ]; then
   echo ""
