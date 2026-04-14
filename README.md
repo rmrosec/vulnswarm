@@ -4,13 +4,7 @@ AI-powered vulnerability discovery using multi-agent static analysis. Finds comp
 
 ## How it works
 
-Semgrep seeds interesting entry points. Opus-class agents do the real work:
-
-```
-repo  -->  recon  -->  analyzers  -->  verifiers  -->  chain-builder  -->  report
-                      (parallel)     (adversarial)
-```
-
+Semgrep seeds entry points, semantic reasoning finds complex zero-days. 8/8 on Jagged Frontier.
 - **Recon** — maps attack surface, runs Semgrep, identifies trust boundaries and entry points
 - **Analyzer** — deep sink/source tracing, multi-file data flow analysis on a single component
 - **Verifier** — adversarial reviewer that tries to *disprove* each finding with code evidence. Up to 2 rounds of debate per component. Disputed findings are never silently dropped — they appear in the report with full reasoning for human review
