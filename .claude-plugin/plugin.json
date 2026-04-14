@@ -1,0 +1,9 @@
+{
+  "name": "vulnswarm",
+  "description": "AI-driven end-to-end vulnerability discovery and exploit chain construction for open-source security research",
+  "version": "0.1.0",
+  "author": {
+    "name": "rmrosec"
+  },
+  "keywords": ["security", "vulnerability", "exploit", "code-review", "zero-day"]
+}
