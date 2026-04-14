@@ -5,19 +5,19 @@ AI-powered vulnerability discovery using multi-agent static analysis. Finds comp
 ## How it works
 
 Semgrep seeds entry points, semantic reasoning finds complex zero-days. 8/8 on Jagged Frontier.
-- **Recon**: maps attack surface, runs Semgrep, identifies trust boundaries and entry points
-- **Analyzer**: deep sink/source tracing, multi-file data flow analysis on a single component
-- **Verifier**: adversarial reviewer that tries to *disprove* each finding with code evidence. Up to 2 rounds of debate per component. Disputed findings are never silently dropped, they appear in the report with full reasoning for human review
-- **Chain Builder**: correlates confirmed findings into multi-step exploit chains
+- **Recon**: Maps attack surface, runs Semgrep, identifies trust boundaries and entry points
+- **Analyzer**: Deep sink/source tracing, multi-file data flow analysis on a single component
+- **Verifier**: Adversarial reviewer that tries to *disprove* each finding with code evidence. Up to 2 rounds of debate per component. Disputed findings are never silently dropped, they appear in the report with full reasoning for human review
+- **Chain Builder**: Correlates confirmed findings into multi-step exploit chains
 
 ## Architecture
 
-**Opus plans, Sonnet executes.** The Opus orchestrator reads recon results, prioritizes the attack surface, and decides which components to analyze, in what order, and when to trigger additional rounds of verification. Sonnet subagents execute the scoped work, each is dispatched to a single component or task. Analyzers run in parallel across independent components (top 5 by priority, more if warranted). Verifiers run per-component after analysis completes.
+**OpusPlan:** The Opus orchestrator reads recon results, prioritizes the attack surface, and decides which components to analyze, in what order, and when to trigger additional rounds of verification. Sonnet subagents execute the scoped work, each is dispatched to a single component or task. Analyzers run in parallel across independent components (top 5 by priority, more if warranted). Verifiers run per-component after analysis completes.
 
-**No shared state.** Each subagent writes to its own JSON file under `.vulnswarm/findings/`. No two agents touch the same file - no locks, no race conditions. The orchestrator and chain-builder read all files via glob.
+**No Shared State:** Each subagent writes to its own JSON file under `.vulnswarm/findings/`. No two agents touch the same file - no locks, no race conditions. The orchestrator and chain-builder read all files via glob.
 * Because the JSON is not schema checked/validated (non-deterministic, LLM output), it is only ever consumed by the agents here, which are self-healing and infer accordingly
 
-**Context engineering.** Recon maps the full repo so analyzers don't have to. Each analyzer receives only its component's context from the attack surface map. The chain-builder reads finding files (not source) for a global view without context overflow.
+**Context Engineering:** Recon maps the full repo so analyzers don't have to. Each analyzer receives only its component's context from the attack surface map. The chain-builder reads finding files (not source) for a global view without context overflow.
 
 ## Requirements
 
